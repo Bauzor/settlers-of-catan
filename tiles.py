@@ -22,6 +22,9 @@ class Vertex:
     
     def getPiece(self):
         return self.piece
+
+    def setPort(self, value):
+        self.port = value
     
     def setNeighbor(self, neighbor, colour=Colour.NONE):
         self.adjacent[neighbor] = colour
@@ -86,7 +89,7 @@ class Hex:
             builds the given coloured piece in the index of the current hex
         '''
         if ( piece == Piece.ROAD ):
-            self.vertices[index1].setNeighbor(self.verices[index2], colour)
+            self.vertices[index1].setNeighbor(self.vertices[index2], colour)
             self.vertices[index2].setNeighbor(self.vertices[index1], colour)
         else:
             self.vertices[index1].setPieceAndColour(piece, colour)
