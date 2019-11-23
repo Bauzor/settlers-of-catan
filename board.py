@@ -1,4 +1,5 @@
 from .tiles import Hex, Edge, Vertex
+from enumerations import Colour, Resource, Piece
 
 class Board():
 
@@ -84,6 +85,90 @@ class Board():
                                     ]
                                 )
                             )
+
+            # Sets all ports
+            board[0][0].vertices[0].setPort(Resource.NONE)
+            board[0][0].vertices[0].setPort(Resource.NONE)
+            board[0][1].vertices[1].setPort(Resource.WOOL)
+            board[0][1].vertices[2].setPort(Resource.WOOL)
+            board[1][0].vertices[0].setPort(Resource.ORE)
+            board[1][0].vertices[5].setPort(Resource.ORE)
+            board[1][3].vertices[1].setPort(Resource.NONE)
+            board[1][3].vertices[2].setPort(Resource.NONE)
+            board[2][4].vertices[2].setPort(Resource.NONE)
+            board[2][4].vertices[3].setPort(Resource.NONE)
+            board[3][0].vertices[0].setPort(Resource.GRAIN)
+            board[3][0].vertices[5].setPort(Resource.GRAIN)
+            board[3][3].vertices[3].setPort(Resource.BRICK)
+            board[3][3].vertices[4].setPort(Resource.BRICK)
+            board[4][0].vertices[4].setPort(Resource.NONE)
+            board[4][0].vertices[5].setPort(Resource.NONE)
+            board[4][1].vertices[3].setPort(Resource.LUMBER)
+            board[4][1].vertices[4].setPort(Resource.LUMBER)
+
+            # Set all adjacencies of vertices
+
+            for row_index, row in enumerate(board):
+                for column_index, hex_ in enumerate(row):
+                    for position, vertex in enumerate(hex_.vertices):
+                        if not bool(vertex.adjacent):
+
+                            vertex.setNeighbor(hex_[(position + 1) % 6])
+                            vertex.setNeighbor(hex_[(position - 1) % 6])
+
+                            if position == 0:
+                                try:
+                                    if row_index in [0, 1, 2]:
+                                        vertex.setNeighbor(row[column - 1].vertices[1])
+                                    else:
+                                        vertex.setNeighbor(board[row_index - 1][column_index].vertices[3])
+                                except:
+                                    pass
+                            elif position == 1:
+                                try:
+                                    if column_index in [0, 1]:
+                                        vertex.setNeighbor(board[row_index - 1][column_index].vertices[0])
+                                    else:
+                                        vertex.setNeighbor(board[row_index - 1][column_index - 1].vertices[2])
+                                except:
+                                    pass
+
+                            elif position == 2:
+                                try:
+                                    if column_index in [0, 1, 2]:
+                                        vertex.setNeighbor(row[column_index + 1].vertices[1])
+                                    else:
+                                        vertex.setNeighbor(board[row_index - 1][column_index].vertices[3])
+                                except:
+                                    pass
+
+                            elif position == 3:
+                                try:
+                                    if row_index in [0, 1, 2]:
+                                        vertex.setNeighbor(board[row_index + 1][column_index + 1].vertices[2])
+                                    else:
+                                        vertex.setNeighbor(row[column_index + 1].vertices[4])
+                                except:
+                                    pass
+
+                            elif position == 4:
+                                try:
+                                    if column_index in [0, 1]:
+                                        vertex.setNeighbor(board[row_index + 1][column_index + 1].vertices[5])
+                                    else:
+                                        vertex.setNeighbor(board[row_index + 1][column_index].vertices[3])
+                                except:
+                                    pass
+
+                            elif position == 5:
+                                try:
+                                    if row_index in [0, 1]:
+                                        vertex.setNeighbor(board[row_index + 1][column_index].vertices[0])
+                                    else:
+                                        vertex.setNeighbor(row[column_index - 1].vertices[4])
+                                except:
+                                    pass
+
             self.board = board
 
 
