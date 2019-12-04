@@ -13,11 +13,11 @@ class ColoredFormatter(logging.Formatter):
             record.name = '\033[93m%s\033[0m' % record.name
         elif record.levelno == logging.ERROR:
             # record.msg = '\033[91m%s\033[0m' % record.msg
-            record.levelname = '\033[91m%s\033[0m' % record.levelname
+            record.levelname = f'\033[91m{record.levelname}\033[0m'
             record.name = '\033[91m%s\033[0m' % record.name
         elif record.levelno == logging.INFO:
-            record.levelname = '\033[36m%s\033[0m' % record.levelname
-            record.name = '\033[36m%s\033[0m' % record.name
+            record.levelname = f'\033[36m{record.levelname}\033[0m'
+            record.name = f'\033[36m{record.name}\033[0m'
         return logging.Formatter.format(self, record)
 
 def init_logger(name, log_level=logging.INFO, logfile=None, propagate=False, **kwargs):

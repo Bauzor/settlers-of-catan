@@ -1,11 +1,11 @@
 from tiles import Hex, Vertex
 from enumerations import Colour, Resource, Piece
-# from logging.base import BaseHelper
+from logs.base import BaseHelpers
 
-class Board():
+class Board(BaseHelpers):
 
-    def __init__(self, level):
-
+    def __init__(self, level, **kwags):
+        super().__init__(**kwags)
         if (level == "Beginner"):
 
             beginner_resource_order = [
@@ -110,13 +110,13 @@ class Board():
             # Set all adjacencies of vertices
 
             for row_index, row in enumerate(board):
-                print(f"Row Index: {row_index}")
+                self.log.info(f"Row Index: {row_index}")
                 for column_index, hex_ in enumerate(row):
-                    print(f"Column Index: {column_index}")
+                    self.log.info(f"Column Index: {column_index}")
                     for position, vertex in enumerate(hex_.vertices):
-                        print(f"Vertex Index {position}")
+                        self.log.info(f"Vertex Index {position}")
                         if not bool(vertex.adjacent):
-                            print(f"Adjacencies not set yet, setting adjacencies...")
+                            self.log.info(f"Adjacencies not set yet, setting adjacencies...")
 
                             vertex.setNeighbor(hex_.vertices[(position + 1) % 6])
                             vertex.setNeighbor(hex_.vertices[(position - 1) % 6])
@@ -139,7 +139,7 @@ class Board():
 
                             elif position == 2:
                                 if row_index not in [0, 1, 2] or not (column_index == (len(row) - 1)):
-                                    print(f"Vertex has a third Neighbour")
+                                    self.log.info(f"Vertex has a third Neighbour")
                                     if column_index == (len(row) - 1):
                                         vertex.setNeighbor(board[row_index - 1][column_index + 1].vertices[3])
                                     else:
