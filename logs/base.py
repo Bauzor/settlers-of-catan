@@ -14,7 +14,6 @@ class BaseHelpers(object):
         }
         log_level = d[log.getEffectiveLevel()] if log is not None else log_level
         self.name = name or __name__
-        # print(f'Initiating {log} at {self.name}')
         self.log_level = log_level if log is None else log.getEffectiveLevel()
         self.name_log = name_log if name_log is not None else str(self.__class__.__name__)
         self.config = config if config is not None else dict()
