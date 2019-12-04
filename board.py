@@ -1,5 +1,6 @@
 from tiles import Hex, Vertex
 from enumerations import Colour, Resource, Piece
+# from logging.base import BaseHelper
 
 class Board():
 
@@ -109,17 +110,19 @@ class Board():
             # Set all adjacencies of vertices
 
             for row_index, row in enumerate(board):
-
+                print(f"Row Index: {row_index}")
                 for column_index, hex_ in enumerate(row):
-
+                    print(f"Column Index: {column_index}")
                     for position, vertex in enumerate(hex_.vertices):
+                        print(f"Vertex Index {position}")
                         if not bool(vertex.adjacent):
+                            print(f"Adjacencies not set yet, setting adjacencies...")
 
                             vertex.setNeighbor(hex_.vertices[(position + 1) % 6])
                             vertex.setNeighbor(hex_.vertices[(position - 1) % 6])
 
                             if position == 0:
-                                if (row_index not in [0, 1, 2]) and not (column_index == 0):
+                                if (row_index not in [0, 1, 2]) or not (column_index == 0):
                                     if column_index == 0:
                                         vertex.setNeighbor(board[row_index - 1][column_index].vertices[5])
                                     else:
@@ -135,16 +138,17 @@ class Board():
                                         vertex.setNeighbor(board[row_index - 1][column_index].vertices[2])
 
                             elif position == 2:
-                                if row_index not in [0, 1, 2] and not (column_index == (len(row) - 1)):
+                                if row_index not in [0, 1, 2] or not (column_index == (len(row) - 1)):
+                                    print(f"Vertex has a third Neighbour")
                                     if column_index == (len(row) - 1):
                                         vertex.setNeighbor(board[row_index - 1][column_index + 1].vertices[3])
                                     else:
                                         vertex.setNeighbor(row[column_index + 1].vertices[1])
 
                             elif position == 3:
-                                if row_index not in [2, 3, 4] and not (column_index == (len(row) - 1)):
+                                if row_index not in [2, 3, 4] or not (column_index == (len(row) - 1)):
                                     if column_index == (len(row) - 1):
-                                        vertex.setNieghbor(board[row_index + 1][column_index + 1].vertices[2])
+                                        vertex.setNeighbor(board[row_index + 1][column_index + 1].vertices[2])
                                     else:
                                         vertex.setNeighbor(row[column_index + 1].vertices[4])
                             elif position == 4:
@@ -157,9 +161,9 @@ class Board():
                                         vertex.setNeighbor(board[row_index + 1][column_index].vertices[3])
 
                             elif position == 5:
-                                if row_index not in [2, 3, 4] and not (column_index == 0):
+                                if row_index not in [2, 3, 4] or not (column_index == 0):
                                     if column_index == 0:
-                                        vertex.setNieghbor(board[row_index + 1][column_index].vertices[0])
+                                        vertex.setNeighbor(board[row_index + 1][column_index].vertices[0])
                                     else:
                                         vertex.setNeighbor(row[column_index - 1].vertices[4])
 
