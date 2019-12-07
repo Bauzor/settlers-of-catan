@@ -178,19 +178,77 @@ class Board(BaseHelpers):
             3:4,
             4:3,
         }
-        if (hex_row in range(5) and hex_col in range(map[hex_row]))
+        if (hex_row in range(5) and hex_col in range(map[hex_row])):
             return self.board[hex_row][hex_col]
         else:
             return None
 
-    def build(self, piece, colour, hex_row, hex_col, index1, index2):
+    def build(self, piece, colour, hex_row, hex_col, index1, index2=None):
         """
         Build handles the creation of roads/cities/settlements
         Does not handle
         - if player has enough roads/cities/settlements
         - payment of the resources
         """
+        map = {
+            0:3,
+            1:4,
+            2:5,
+            3:4,
+            4:3,
+        }
+        # Input verification
+        assert(index1 in range(6))
+        assert(index2 in range(6))
+        assert(piece in Piece)
+        assert(colour in Colour)
+        assert(hex_row in range(5))
+        assert(hex_col in range(map[hex_row]))
+
+        # Set the current hex
+        curr_hex = self.getHex(hex_row, hex_col)
 
         # Building a road
-        if (piece == "road"):
-            
+        if (piece == Piece.ROAD):
+            # Set the counter clockwise and clockwise indices
+            ccw_index = min(index1, index2) if index1 in range(5) else 5
+            cw_index = max(index1, index2) if ccw_index != 5 else 0
+            # Get all Neighbors of respective indices
+            ccw_adjacent_vertices = curr_hex.vertices[ccw_index].adjacent
+            cw_adjacent_vertices = curr_hex.vertices[cw_index].adjacent
+            # Generate boolean values for build conditions
+            edge_colour_is_none = ccw_adjacent_vertices.values()[0].colour == Colour.NONE
+            has_neighbouring_settlement = colour in [
+                curr_hex.vertices[ccw_index].getColour(),
+                curr_hex.vertices[cw_index].getColour(),
+            ]
+            has_unblocked_neighbouring_road_ccw = curr_hex.vertices[ccw_index].getColour() == Colour.NONE and colour in [
+                ccw_adjacent_vertices.values()[1],
+                ccw_adjacent_vertices.values()[2],
+            ]
+            has_unblocked_neighbouring_road_cw = curr_hex.vertices[cw_index].getColour() == Colour.NONE and colour in [
+                cw_adjacent_vertices.values()[1],
+                cw_adjacent_vertices.values()[2],
+            ]
+            has_unblocked_neighbouring_road = has_unblocked_neighbouring_road_ccw and has_unblocked_neighbouring_road_cw
+            assert(edge_colour_is_none and (has_neighbouring_settlement or has_unblocked_neighbouring_road))
+            curr_hex.setICP(ccw_index, colour, Piece.ROAD, cw_index)
+
+        # Building a settlement
+        elif (piece == Piece.SETTLEMENT):
+            # Validate all neighbouring vertices do not have a settlement
+            # and at least one neighbouring edge is of the same colour
+            has_road = False
+            for neighbouring_vertex, neighbouring_edge in curr_hex.vertices[index1].adjacent.items():
+                assert(Colour.NONE == neighbouring_vertex.getColour())
+                if neighbouring_edge == colour:
+                    has_road = True
+            if has_road:
+                curr_hex.setICP(index1, colour, piece)
+
+        else:
+            # Validate there is a preexisting settlement where the city is being built
+            has_settlement = curr_hex.vertices[index1].getPiece() == Piece.SETTLEMENT
+            is_same_colour = curr_hex.vertices[index1].getColour() == colour
+            if (is_same_colour and has_settlment):
+                curr_hex.setICP(index1, colour, piece)
