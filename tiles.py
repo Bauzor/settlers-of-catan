@@ -11,6 +11,7 @@ class Vertex:
             colour: Enum Class Colour
             port: Enum Class Resource
             piece: Enum Class Piece
+            adjacent: Vertex : Enum Class Colour
         '''
         self.colour = Colour.NONE
         self.port = Resource.NONE
