@@ -250,5 +250,5 @@ class Board(BaseHelpers):
             # Validate there is a preexisting settlement where the city is being built
             has_settlement = curr_hex.vertices[index1].getPiece() == Piece.SETTLEMENT
             is_same_colour = curr_hex.vertices[index1].getColour() == colour
-            if (is_same_colour and has_settlment):
+            if (is_same_colour and has_settlement):
                 curr_hex.setICP(index1, colour, piece)
