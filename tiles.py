@@ -1,4 +1,11 @@
-from enumerations import Colour, Resource, Piece
+from enumerations import (
+    Colour,
+    Resource,
+    Piece,
+    DiceValues
+)
+from typing import List
+import logging
 
 class Vertex:
     '''
@@ -17,23 +24,35 @@ class Vertex:
         self.port = Resource.NONE
         self.piece = Piece.NONE
         self.adjacent = {}
+        self.logger = logging.getLogger("Vertex")
+        self.logger.info('Creating Vertex Instance')
     
     def getColour(self):
+        self.logger.info(f"Got Colour: {self.colour}")
         return self.colour
     
     def getPiece(self):
+        self.logger.info(f"Got Piece: {self.piece}")
         return self.piece
 
     def setPort(self, value):
+        self.logger.info(f"Port value before setPort is {self.port}")
+        self.logger.info(f"Set Port as {value}")
         self.port = value
+        self.logger.info(f"Port value after setPort is {self.port}")
     
     def setNeighbor(self, neighbor, colour=Colour.NONE):
+        self.logger.info(f"Neighbour list before setNeighbor is {self.adjacent}")
+        self.logger.info(f"Set Neighbor as {neighbor} : {colour}")
         self.adjacent[neighbor] = colour
+        self.logger.info(f"Neighbour list after setNeighbour is {self.adjacent}")
 
     def setPieceAndColour(self, piece, colour):
+        self.logger.info(f"Piece and colour before setPieceAndColour is {self.piece}, {self.colour}")
+        self.logger.info(f"Set Piece as {piece} and Colour as {colour}")
         self.piece = piece
         self.colour = colour
-    
+        self.logger.info(f"Piece and colour after setPieceAndColour is {self.piece}, {self.colour}")
 
 class Hex:
     '''
@@ -41,40 +60,51 @@ class Hex:
     '''
     def __init__(
         self,
-        value = None,
-        resource = Resource.NONE,
-        vertices = [],
-        robber = False
+        value: int = None,
+        resource: Resource = Resource.NONE,
+        vertices: List[Vertex] = [],
+        robber: bool = False
     ):
         self.value = value
         self.resource = resource
         self.vertices = vertices
         self.robber = robber
+        self.logger = logging.getLogger("Hex")
+        self.logger.info('Created Hex Instance')
 
     def getResource(self):
         '''
         Returns: Enum class Resource
         '''
+        self.logger.info(f"Got resource: {self.resource}")
         return self.resource
 
-    def getRobber(self):
+    def hasRobber(self):
         '''
         Returns: bool
             boolean of if robber is on hex
         '''
+        self.logger.info(f"Hex has robber is {self.robber}")
         return self.robber
 
-    def setRobber(self, value):
+    def setRobber(self, value: bool):
         '''
         Args:
             value: bool
         Side - Effects:
             mutates robber to be value
         '''
+        self.logger.info(f"Value before setting robber is {self.robber}")
         self.robber = value
+        self.logger.info(f"Value after setting robber is {self.robber}")
     
 
-    def setICP(self, index1, colour=Colour.NONE, piece=Piece.NONE, index2=None):
+    def setICP(
+        self,
+        index1: DiceValues,
+        colour: Colour=Colour.NONE,
+        piece: Piece=Piece.NONE,
+        index2: DiceValues=None):
         '''
         setICP -> set Piece, Colour and Index
         Args:

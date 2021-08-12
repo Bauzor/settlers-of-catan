@@ -1,28 +1,14 @@
 from tiles import Hex, Vertex
-from enumerations import Colour, Resource, Piece
-from logs.base import BaseHelpers
+from enumerations import Colour, Resource, Piece, Difficulty
+from beginner_board_constants import BoardConfigurations
 
-class Board(BaseHelpers):
+class Board(BoardConfigurations):
 
-    def __init__(self, level, **kwags):
-        super().__init__(**kwags)
-        if (level == "Beginner"):
+    def __init__(self, level):
+        if (level == Difficulty.BEGINNER):
 
-            beginner_resource_order = [
-                [Resource.LUMBER, Resource.WOOL, Resource.GRAIN],
-                [Resource.BRICK, Resource.ORE, Resource.BRICK, Resource.GRAIN],
-                [Resource.NONE, Resource.LUMBER, Resource.GRAIN, Resource.LUMBER, Resource.GRAIN],
-                [Resource.BRICK, Resource.WOOL, Resource.WOOL, Resource.ORE],
-                [Resource.ORE, Resource.GRAIN, Resource.LUMBER]
-            ]
-
-            beginner_num_tokens_order = [
-                [11, 12, 9],
-                [4, 6, 5, 10],
-                [None, 3, 11, 4, 8],
-                [8, 10, 9, 3],
-                [5, 2, 6],
-            ]
+            beginner_resource_order = self.beginner_resource_order
+            beginner_num_tokens_order = self.beginner_num_tokens_order
 
             board = [
                 [],
@@ -32,6 +18,8 @@ class Board(BaseHelpers):
                 []
             ]
 
+            # Hex Generation using Configuration
+            # Handles sharing of vertices
             for row, (resource_row, num_token_row) in enumerate(zip(beginner_resource_order, beginner_num_tokens_order)):
                 for column, (resource, value) in enumerate(zip(resource_row, num_token_row)):
                     if (row == 0 and column == 0):
@@ -108,15 +96,10 @@ class Board(BaseHelpers):
             board[4][1].vertices[4].setPort(Resource.LUMBER)
 
             # Set all adjacencies of vertices
-
             for row_index, row in enumerate(board):
-                self.log.info(f"Row Index: {row_index}")
                 for column_index, hex_ in enumerate(row):
-                    self.log.info(f"Column Index: {column_index}")
                     for position, vertex in enumerate(hex_.vertices):
-                        self.log.info(f"Vertex Index {position}")
                         if not bool(vertex.adjacent):
-                            self.log.info(f"Adjacencies not set yet, setting adjacencies...")
 
                             vertex.setNeighbor(hex_.vertices[(position + 1) % 6])
                             vertex.setNeighbor(hex_.vertices[(position - 1) % 6])
@@ -139,7 +122,7 @@ class Board(BaseHelpers):
 
                             elif position == 2:
                                 if row_index not in [0, 1, 2] or not (column_index == (len(row) - 1)):
-                                    self.log.info(f"Vertex has a third Neighbour")
+
                                     if column_index == (len(row) - 1):
                                         vertex.setNeighbor(board[row_index - 1][column_index + 1].vertices[3])
                                     else:

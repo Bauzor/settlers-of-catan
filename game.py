@@ -4,27 +4,25 @@ import random
 
 class Game:
 
-    # Ordered list of Player objects
-    players = []
-
-    # Ordered list of Hex Objects
-    board = []
-
-    # Ordered list of Development Cards
-    deck = []
-
-    # Resources in the bank
-    resources = {
-		"brick":0,
-        "wool":0,
-        "ore":0,
-        "grain":0,
-        "lumber":0
-    }
-
     # Game Initialization
     def __init__(self, num_of_players, gamemode):
+        # Ordered list of Player objects
+        self.players = []
 
+        # Ordered list of Hex Objects
+        self.board = []
+
+        # Ordered list of Development Cards
+        self.deck = []
+
+        # Resources in the bank
+        resources = {
+            "brick":0,
+            "wool":0,
+            "ore":0,
+            "grain":0,
+            "lumber":0
+        }
         # Based on the Number of Players
         for _ in list(range(num_of_players)):
 

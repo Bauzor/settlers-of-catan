@@ -1,4 +1,5 @@
 from board import Board
+from enumerations import Difficulty
 
 if __name__ == "__main__":
-    game = Board("Beginner")
+    game = Board(Difficulty.BEGINNER)
